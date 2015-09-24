@@ -1,12 +1,14 @@
 'use strict';
 
 var React = require('react');
-var App = require('./components/app.js');
+var Relay = require('react-relay');
+var App = require('./components/CinemaTicket');
+var CinemaTicketHomeRoute = require('./routes/CinemaTicketHomeRoute');
 var rootEl = document.body;
 
 require('../styles/main.css');
 
 React.render(
-  <App />,
+  <Relay.RootContainer Component={CinemaTicket} route={new CinemaTicketHomeRoute()}/>,
   rootEl
 );

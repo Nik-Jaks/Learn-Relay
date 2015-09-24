@@ -3,22 +3,7 @@
 var React = require('react');
 var Relay = require('react-relay');
 
-var { PropTypes } = React;
-
 class CinemaTicket extends React.component {
-
-  propTypes: {
-    seat: PropTypes.string,
-    movie: PropTypes.object,
-    ticketType: PropTypes.object
-  }
-
-  getDefaultProps() {
-    return {
-      seat: 'NA',
-      ticketType: {name: 'standard', price: 5}
-    }
-  }
 
   render() {
     return (
@@ -36,27 +21,20 @@ class CinemaTicket extends React.component {
 
 CinemaTicket = Relay.createContainer(CinemaTicket, {
   fragments: {
-    movie: () => Relay.QL`
-      fragment on movie {
-        title,
-        rating
+    ticket: () => Relay.QL`
+      fragment on Ticket {
+        movie {
+          title,
+          rating
+        },
+        seat,
+        ticketType {
+          name,
+          price
+        }
       }
     `,
   }
 });
-
-class HelloRoute extends Relay.Route {
-  static routeName = 'Cinema Ticket';
-  static path = '/graphql';
-  static queries = {
-    movie: (Component) => Relay.QL`
-      query movieQuery {
-        movie {
-          ${Component.getFragment('movie')},
-        },
-      }
-    `,
-  };
-}
 
 module.exports = CinemaTicket;
