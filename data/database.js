@@ -1,33 +1,42 @@
-/**
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
- *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
- */
+'use strict';
 
-// Model types
-class User extends Object {}
-class Widget extends Object {}
+export class Ticket extends Object {}
+export class Movie extends Object {}
+export class Price extends Object {}
 
-// Mock data
-var viewer = new User();
-viewer.id = '1';
-viewer.name = 'Anonymous';
-var widgets = ['What\'s-it', 'Who\'s-it', 'How\'s-it'].map((name, i) => {
-  var widget = new Widget();
-  widget.name = name;
-  widget.id = `${i}`;
-  return widget;
-});
 
-module.exports = {
-  // Export methods that your schema can use to interact with your database
-  getUser: (id) => id === viewer.id ? viewer : null,
-  getViewer: () => viewer,
-  getWidget: (id) => widgets.find(w => w.id === id),
-  getWidgets: () => widgets,
-  User,
-  Widget,
-};
+var ticket = new Ticket();
+
+
+ticket.id = '1';
+ticket.movie = '20151';
+ticket.seat = 'A1';
+ticket.price = '1';
+
+export function getTicket() { return ticket; }
+
+export function getMovie(id) {
+  // console.log(id);
+  // if (id==='20151') {
+    var movie = new Movie();
+    movie.id = '20151';
+    movie.title = 'Le Diner de Cons';
+    movie.rating = '12A';
+    return movie;
+  // } else {
+  //   return id;
+  // }
+}
+
+export function getPrice(id) {
+  console.log(id);
+  if (id==='1') {
+    var price = new Price();
+    price.id = '1';
+    price.type = 'Standard';
+    price.amount = '£10.00';
+    return price;
+  } else {
+    return null;
+  }
+}

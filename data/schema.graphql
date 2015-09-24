@@ -1,8 +1,27 @@
-type movie {
+type Movie implements Node {
+  id: ID!
   title: String
   rating: String
 }
 
+interface Node {
+  id: ID!
+}
+
+type Price implements Node {
+  id: ID!
+  type: String
+  amount: String
+}
+
 type Query {
-  movie: movie
+  ticket: Ticket
+  node(id: ID!): Node
+}
+
+type Ticket implements Node {
+  id: ID!
+  movie: Movie
+  seat: String
+  price: Price
 }

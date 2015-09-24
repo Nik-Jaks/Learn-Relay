@@ -1,18 +1,34 @@
-# Learn-Relay
-Start with a react component and produce a graphQL server to accommodate it's needs.
+# Relay Starter Kit
 
-We assume you have an understanding of React for this tutorial.
+This kit includes an app server, a GraphQL server, and a transpiler that you can use to get started building an app with Relay. For a walkthrough, see the [Relay tutorial](https://facebook.github.io/relay/docs/tutorial.html).
 
-## Start With A simple React Component
+## Installation
 
-We will start with a basic component, a cinema ticket.
+```
+npm install
+```
 
-It requires the following props:
-* seat
-* movie - An object with fields title and rating
-* ticketType - An object with fields name and price
+## Running
 
-We want to be able to fetch the data from an external source using Relay.
+Start a local server:
 
-## Wrap it in a Relay container!
+```
+npm start
+```
 
+## Developing
+
+Any changes you make to files in the `js/` directory will cause the server to
+automatically rebuild the app and refresh your browser.
+
+If at any time you make changes to `data/schema.js`, stop the server,
+regenerate `data/schema.json`, and restart the server:
+
+```
+npm run update-schema
+npm start
+```
+
+## License
+
+Relay Starter Kit is [BSD licensed](./LICENSE). We also provide an additional [patent grant](./PATENTS).

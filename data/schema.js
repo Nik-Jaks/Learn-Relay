@@ -5,36 +5,120 @@ import {
 } from 'graphql';
 
 import {
-  connectionArgs,
-  connectionDefinitions,
-  connectionFromArray,
-  fromGlobalId,
-  globalIdField,
-  mutationWithClientMutationId,
   nodeDefinitions,
+  globalIdField,
+  fromGlobalId,
 } from 'graphql-relay';
 
-var MOVIE = {
-  title: 'Le Diner de Cons',
-  rating: '12'
-}
+import {
+  ticket,
+  getTicket,
+  getMovie,
+  getPrice
+} from './database'
 
-var MovieType = new GraphQLObjectType({
-  name: 'movie',
+var {nodeInterface, nodeField} = nodeDefinitions(
+  (globalId) => {
+    var {type, id} = fromGlobalId(globalId);
+    if (type === 'Ticket') {
+      return getTicket();
+    }
+    if (type === 'Movie') {
+      return getMovie(id);
+    } else if (type === 'Price') {
+      return getPrice(id);
+    } else {
+      return "movie";
+    }
+  },
+  (obj) => {
+    if (obj instanceof Ticket) {
+      return ticketType;
+    } else if (obj instanceof Movie)  {
+      return movieType;
+    } else if (obj instanceof Price)  {
+      return priceType;
+    } else {
+      return "movie";
+    }
+  }
+);
+
+var movieType = new GraphQLObjectType({
+  name: 'Movie',
+  description: 'A movie at our wonderful one screen Cinema',
   fields: () => ({
-    title: {type: GraphQLString},
-    rating: {type: GraphQLString}
+    id: globalIdField('Movie'),
+    title: {
+      type: GraphQLString,
+      description: 'The title of the movie',
+      resolve: (movie) => movie.title
+    },
+    rating: {
+      type: GraphQLString,
+      description: 'Can be one of U, PG, 12, 12A, 15, 18',
+      resolve: (movie) => movie.rating
+    },
+  }),
+  interfaces: [nodeInterface]
+});
+
+var priceType = new GraphQLObjectType({
+  name: 'Price',
+  description: 'Pricing info for the ticket',
+  fields: () => ({
+    id: globalIdField('Price'),
+    type: {
+      type: GraphQLString,
+      description: 'type of ticket, standard, 3D, student, OAP',
+      resolve: (price) => price.type
+    },
+    amount: {
+      type: GraphQLString,
+      description: 'Cost of ticket',
+      resolve: (price) => price.amount
+    },
+  }),
+  interfaces: [nodeInterface]
+});
+
+var ticketType = new GraphQLObjectType({
+  name: 'Ticket',
+  description: 'Your cinema ticket!!!',
+  fields: () => ({
+    id: globalIdField('Ticket'),
+    movie: {
+      type: movieType ,
+      description: 'movie object with name, id and rating',
+      resolve: (ticket) => ticket.movie
+    },
+    seat: {
+      type: GraphQLString,
+      description: 'seat number silly',
+      resolve: (ticket) => ticket.seat
+    },
+    price: {
+      type: priceType ,
+      description: 'price object with type, id and amount',
+      resolve: (ticket) => ticket.price
+    },
+  }),
+  interfaces: [nodeInterface]
+});
+
+
+
+var queryType = new GraphQLObjectType({
+  name: 'Query',
+  fields: () => ({
+    ticket: {
+      type: ticketType,
+      resolve: () => getTicket()
+    },
+    node: nodeField
   }),
 });
 
-export default new GraphQLSchema({
-  query: new GraphQLObjectType({
-    name: 'Query',
-    fields: () => ({
-      movie: {
-        type: MovieType,
-        resolve: () => MOVIE
-      },
-    }),
-  }),
+export var Schema = new GraphQLSchema({
+  query: queryType
 });

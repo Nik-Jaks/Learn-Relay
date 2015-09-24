@@ -2,7 +2,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import Schema from '../data/schema';
+import { Schema } from '../data/schema';
 import { graphql }  from 'graphql';
 import { introspectionQuery, printSchema } from 'graphql/utilities';
 
@@ -25,5 +25,6 @@ async () => {
 // Save user readable type system shorthand of schema
 fs.writeFileSync(
   path.join(__dirname, '../data/schema.graphql'),
-  printSchema(Schema)
+  printSchema(Schema),
+  console.log('written to schema.graphql')
 );
