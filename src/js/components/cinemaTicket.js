@@ -11,8 +11,8 @@ class CinemaTicket extends React.component {
         <h1>{this.props.movie.title}</h1>
         <h2>{this.props.movie.rating}</h2>
         <p>{this.props.seat}</p>
-        <p>{this.props.ticketType.name}</p>
-        <p>{this.props.ticketType.price}</p>
+        <p>{this.props.price.amount}</p>
+        <p>{this.props.price.type}</p>
       </div>
     )
   }
@@ -29,8 +29,8 @@ CinemaTicket = Relay.createContainer(CinemaTicket, {
         },
         seat,
         ticketType {
-          name,
-          price
+          type,
+          amount
         }
       }
     `,

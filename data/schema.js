@@ -19,6 +19,9 @@ import {
 var {nodeInterface, nodeField} = nodeDefinitions(
   (globalId) => {
     var {type, id} = fromGlobalId(globalId);
+    if (type === 'Ticket') {
+      return getTicket();
+    }
     if (type === 'Movie') {
       return getMovie(id);
     } else if (type === 'Price') {
@@ -66,9 +69,9 @@ var priceType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'type of ticket, standard, 3D, student, OAP',
     },
-    rating: {
+    amount: {
       type: GraphQLString,
-      description: 'Can be one of U, PG, 12, 12A, 15, 18',
+      description: 'Cost of ticket',
     },
   }),
   interfaces: [nodeInterface]
@@ -81,22 +84,24 @@ var ticketType = new GraphQLObjectType({
     id: globalIdField('Ticket'),
     movie: {
       type: movieType ,
-      description: 'movie object with name, id and rating'
-      resolve: (ticket) => getMovie(ticket.movie)
+      description: 'movie object with name, id and rating',
+      resolve: (ticket) => ticket.movie
     },
     seat: {
       type: GraphQLString,
-      description: 'seat number silly'
+      description: 'seat number silly',
       resolve: (ticket) => ticket.seat
     },
     price: {
       type: priceType ,
-      description: 'price object with type, id and amount'
-      resolve: (ticket) => getPrice(ticket.price)
+      description: 'price object with type, id and amount',
+      resolve: (ticket) => ticket.price
     },
   }),
   interfaces: [nodeInterface]
 });
+
+
 
 var queryType = new GraphQLObjectType({
   name: 'Query',
