@@ -16,13 +16,11 @@ module.exports = [
 	},
 	{
 		method: 'POST',
-		path: '/graphql/{name*}',
+		path: '/graphql',
 		handler: function(req,reply){
-			var name = Object.keys(req.payload)[0];
-			console.log("hello", name);
-			GraphQL(Schema, name)
+			var query = req.payload.query;
+			GraphQL(Schema, query)
 			.then(function(result){
-				console.log('result', result);
 				reply(JSON.stringify(result));
 			})
 		}
