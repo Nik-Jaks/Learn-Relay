@@ -6,7 +6,8 @@ import {
 
 import {
   nodeDefinitions,
-  globalIdField
+  globalIdField,
+  fromGlobalId,
 } from 'graphql-relay';
 
 import {
@@ -18,26 +19,35 @@ import {
 
 var {nodeInterface, nodeField} = nodeDefinitions(
   (globalId) => {
+      console.log("nI", globalId);
     var {type, id} = fromGlobalId(globalId);
     if (type === 'Ticket') {
+      console.log("nodeInterface",type, id)
       return getTicket();
     }
     if (type === 'Movie') {
+      console.log("nodeInterface",type, id)
       return getMovie(id);
     } else if (type === 'Price') {
+      console.log("nodeInterface",type, id)
       return getPrice(id);
     } else {
+      console.log("null");
       return null;
     }
   },
   (obj) => {
     if (obj instanceof Ticket) {
+      console.log('nodeField' obj)
       return ticketType;
     } else if (obj instanceof Movie)  {
+      console.log('nodeField' obj)
       return movieType;
     } else if (obj instanceof Price)  {
+      console.log('nodeField' obj)
       return priceType;
     } else {
+      console.log("null");
       return null;
     }
   }
