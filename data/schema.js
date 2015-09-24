@@ -51,10 +51,12 @@ var movieType = new GraphQLObjectType({
     title: {
       type: GraphQLString,
       description: 'The title of the movie',
+      resolve: (movie) => movie.title
     },
     rating: {
       type: GraphQLString,
       description: 'Can be one of U, PG, 12, 12A, 15, 18',
+      resolve: (movie) => movie.rating
     },
   }),
   interfaces: [nodeInterface]
@@ -68,10 +70,12 @@ var priceType = new GraphQLObjectType({
     type: {
       type: GraphQLString,
       description: 'type of ticket, standard, 3D, student, OAP',
+      resolve: (price) => price.type
     },
     amount: {
       type: GraphQLString,
       description: 'Cost of ticket',
+      resolve: (price) => price.amount
     },
   }),
   interfaces: [nodeInterface]
@@ -114,6 +118,6 @@ var queryType = new GraphQLObjectType({
   }),
 });
 
-export default new GraphQLSchema({
+export var Schema = new GraphQLSchema({
   query: queryType
 });
