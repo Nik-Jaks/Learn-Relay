@@ -28,10 +28,12 @@ var {nodeInterface, nodeField} = nodeDefinitions(
     }
   },
   (obj) => {
-    if (obj instanceof Game) {
-      return gameType;
-    } else if (obj instanceof HidingSpot)  {
-      return hidingSpotType;
+    if (obj instanceof Ticket) {
+      return ticketType;
+    } else if (obj instanceof Movie)  {
+      return movieType;
+    } else if (obj instanceof Price)  {
+      return priceType;
     } else {
       return null;
     }
@@ -80,17 +82,17 @@ var ticketType = new GraphQLObjectType({
     movie: {
       type: movieType ,
       description: 'movie object with name, id and rating'
-      resolve: (ticket) => getMovie(ticket.id)
+      resolve: (ticket) => getMovie(ticket.movie)
     },
     seat: {
       type: GraphQLString,
       description: 'seat number silly'
-      resolve: (ticket) => getSeat(ticket.id)
+      resolve: (ticket) => ticket.seat
     },
     price: {
       type: priceType ,
       description: 'price object with type, id and amount'
-      resolve: (ticket) => getPrice(ticket.id)
+      resolve: (ticket) => getPrice(ticket.price)
     },
   }),
   interfaces: [nodeInterface]
@@ -103,6 +105,7 @@ var queryType = new GraphQLObjectType({
       type: ticketType,
       resolve: () => getTicket()
     },
+    node: nodeField
   }),
 });
 
